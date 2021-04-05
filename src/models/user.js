@@ -22,14 +22,14 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  phone:{
-      type:String,
-      required: true,
-      trim: true,
-      validate: {
-        validator: (phone) => phone.length===10,
-      },
-  }
+  phone: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: {
+      validator: (phone) => phone.length === 10,
+    },
+  },
 });
 
 userSchema.pre("save", function (next) {
@@ -40,21 +40,16 @@ userSchema.pre("save", function (next) {
 
 userSchema.methods.comparePassword = function (password) {
   const user = this;
+  console.log(password);
+  console.log(user.password);
   return bcrypt.compareSync(password, user.password);
 };
 
 userSchema.methods.generateToken = function () {
-  const user = this;
-  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "24h" });
-};
-
-userSchema.methods.deleteToken = async function () {
-  const user = this;
-  await user.update({ $unset: { token: 1 } }, function (err, user) {
-    if (err) return cb(err);
-    cb(null, user);
+  const { email, phone } = this;
+  return jwt.sign({ email, phone }, process.env.JWT_SECRET, {
+    expiresIn: "24h",
   });
-  return user;
 };
 
 export default model("User", userSchema);
