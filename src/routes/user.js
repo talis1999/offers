@@ -16,34 +16,24 @@ router.post("/", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.find({ email });
+    const user = await User.findOne({ email });
     if (user) {
       if (user.comparePassword(password)) {
         res.status(200).json(await user.generateToken());
-      } else throw new Error();
-    } else throw new Error();
+      } else throw new Error("invalid password");
+    } else throw new Error("invalid user");
   } catch (e) {
+    console.log(e);
     res.status(400).json({ message: e });
   }
 });
 
-router.post("/logout",auth, async (req, res) => {
-    try {
-        const user = await User.find({_id:req.user._id});
-        await user.deleteToken()
-        res.status(200).json({message:'logout complete'});
-    } catch (e) {
-        res.status(400).json({ message: e });
-    }
-
-});
-
 router.get("/info", auth, (req, res) => {
-    try {
-        res.status(200).json(req.user);
-    } catch (e) {
-         res.status(400).json({ message: e });
-    }
+  try {
+    res.status(200).json(req.user);
+  } catch (e) {
+    res.status(400).json({ message: e });
+  }
 });
 
 export default router;
