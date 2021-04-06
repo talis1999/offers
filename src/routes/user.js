@@ -20,8 +20,8 @@ router.post("/login", async (req, res) => {
     if (user) {
       if (user.comparePassword(password)) {
         res.status(200).json(await user.generateToken());
-      } else throw new Error("invalid password");
-    } else throw new Error("invalid user");
+      } else throw new Error();
+    } else throw new Error();
   } catch (e) {
     console.log(e);
     res.status(400).json({ message: e });
