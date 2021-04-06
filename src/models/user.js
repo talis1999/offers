@@ -27,7 +27,10 @@ const userSchema = new Schema({
     required: true,
     trim: true,
     validate: {
-      validator: (phone) => phone.length === 10,
+      validator: (phone) =>
+        /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(
+          phone
+        ),
     },
   },
 });
