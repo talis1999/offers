@@ -5,8 +5,8 @@ import helmet from "helmet";
 import compression from "compression";
 import dotenv from "dotenv";
 import "./db/mongoConnection.js";
-import user from './routes/user.js'
-import offers from './routes/offers.js'
+import user from "./routes/user.js";
+import offers from "./routes/offers.js";
 dotenv.config();
 const app = express();
 
@@ -17,10 +17,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
 
-//routes 
-app.use('/user', user)
-app.use('/offers', offers)
-
+//routes
+app.use("/user", user);
+app.use("/offers", offers);
 
 //basic home route
 app.get("/", (req, res) => {

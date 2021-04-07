@@ -2,22 +2,22 @@ import pkg from "mongoose";
 const { Schema, model } = pkg;
 
 const offerSchema = new Schema({
-  title:{
+  title: {
     type: String,
-    required: true, 
+    required: true,
   },
-  type:{
+  type: {
     type: String,
-    required: true, 
+    required: true,
   },
   description: {
     type: String,
     required: true,
     default() {
-        return '';
+      return "";
     },
     validate: {
-      validator: (description) => description.length<=200,
+      validator: (description) => description.length <= 200,
     },
   },
   email: {
@@ -32,15 +32,17 @@ const offerSchema = new Schema({
       },
     },
   },
-  phone:{
-      type:String,
-      required: true,
-      trim: true,
-      validate: {
-        validator: (phone) => phone.length===10,
-      },
-  }
+  phone: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: {
+      validator: (phone) =>
+        /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(
+          phone
+        ),
+    },
+  },
 });
-
 
 export default model("Offer", offerSchema);

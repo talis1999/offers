@@ -22,14 +22,17 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  phone:{
-      type:String,
-      required: true,
-      trim: true,
-      validate: {
-        validator: (phone) => phone.length===10,
-      },
-  }
+  phone: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: {
+      validator: (phone) =>
+        /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(
+          phone
+        ),
+    },
+  },
 });
 
 userSchema.pre("save", function (next) {
@@ -44,17 +47,10 @@ userSchema.methods.comparePassword = function (password) {
 };
 
 userSchema.methods.generateToken = function () {
-  const user = this;
-  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "24h" });
-};
-
-userSchema.methods.deleteToken = async function () {
-  const user = this;
-  await user.update({ $unset: { token: 1 } }, function (err, user) {
-    if (err) return cb(err);
-    cb(null, user);
+  const { email, phone } = this;
+  return jwt.sign({ email, phone }, process.env.JWT_SECRET, {
+    expiresIn: "24h",
   });
-  return user;
 };
 
 export default model("User", userSchema);
