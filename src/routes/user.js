@@ -23,7 +23,6 @@ router.post("/login", async (req, res) => {
       } else throw new Error();
     } else throw new Error();
   } catch (e) {
-    console.log(e);
     res.status(400).json({ message: e });
   }
 });
